@@ -13,6 +13,7 @@ import ru.netology.bdd.page.TransferPage;
 import ru.netology.bdd.page.VerificationPage;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static ru.netology.bdd.data.DataHelper.getCardIdInList;
 
 public class TemplateSteps {
     private static LoginPage loginPage;
@@ -30,7 +31,7 @@ public class TemplateSteps {
 
     @When("the user login with name {string} and password {string}")
     public void loginWithNamePassword(String login, String password) {
-        verificationPage = loginPage.validLogin(new DataHelper.UserInfo(login, password));
+        verificationPage = LoginPage.validLogin(new DataHelper.UserInfo(login, password));
     }
 
     @And("inputs verification code {string}")
@@ -38,25 +39,20 @@ public class TemplateSteps {
         dashBoardPage = verificationPage.validVerify(new DataHelper.VerCode(code));
     }
 
-    @Then("verification is complete and dashboard is open")
-    public void dashBoardPageIsOpen() {
-        dashBoardPage = dashBoardPage;
-    }
-
-    @When("the user chooses to replenish the first card")
+    @When("the user chooses to replenish the card")
     public void chooseCardToReplenish() {
-        dashBoardPage.selectCardToTransfer(dataHelper.getFstCardInfo());
+        dashBoardPage.selectCardToTransfer(DataHelper.getCardIdInList());
     }
 
-    @And("inputs {string} rub to transfer from first card to second")
+    @And("inputs {string} rub to transfer from one card to another")
     public void transferMoney(String amount) {
-        transferPage.makeTransfer(Integer.parseInt(amount), dataHelper.getSndCardInfo());
+        transferPage.makeTransfer(Integer.parseInt(amount), getCardIdInList());
     }
 
-    @Then("the balance of the first card must be {string} rub")
-    public void getFstCardBalance(String amount) {
-        var actualBalanceFstCard = dashBoardPage.getCardBalance(dataHelper.getFstCardInfo());
-        var expectBalanceFstCard = amount;
-        assertEquals(expectBalanceFstCard, actualBalanceFstCard);
+    @Then("the balance of the card replenished must be {string} rub")
+    public void getCardBalance(String balance) {
+        var actualBalance = DashBoardPage.getCardBalance(getCardIdInList());
+        var expectBalance = balance;
+        assertEquals(expectBalance, actualBalance);
     }
 }

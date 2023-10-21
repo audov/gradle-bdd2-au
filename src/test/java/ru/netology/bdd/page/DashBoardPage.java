@@ -41,12 +41,4 @@ public class DashBoardPage {
         cards.findBy(attribute("data-test-id", cardInfo.getId())).$("button").click();
         return new TransferPage();
     }
-
-    public static int getRandomValidAmount(DataHelper.CardInfo cardInfo) {
-        return faker.number().numberBetween(1, getCardBalance(cardInfo));
-    }
-
-    public static int getRandomInvalidPosAmount(int getCardBalance) {
-        return faker.number().numberBetween(getCardBalance + 0, getCardBalance + 1);
-    }
 }
